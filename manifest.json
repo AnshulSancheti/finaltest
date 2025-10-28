@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "FactCheck AI",
+  "version": "1.0",
+  "description": "Analyze the current page using GPT-4o mini to check if the information is true or false.",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "FactCheck AI"
+  }
+}
