@@ -1,6 +1,6 @@
 const OpenAI = require("openai");
 
-module.exports = async function (req, res) {
+module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).send("Only POST allowed");
   }
@@ -9,7 +9,7 @@ module.exports = async function (req, res) {
   if (!url) return res.status(400).send("Missing URL");
 
   const openai = new OpenAI({
-    apiKey: "sk-proj-REPLACE_WITH_YOUR_KEY"
+    apiKey: "sk-proj-REPLACE"
   });
 
   try {
@@ -30,23 +30,16 @@ module.exports = async function (req, res) {
       .replace(/\s+/g, " ")
       .slice(0, 9000);
 
-    const prompt = `
-You are a fact-checking AI...
+    const prompt = `Fact-check this: ${text}`;
 
------ BEGIN PAGE TEXT -----
-${text}
------ END PAGE TEXT -----
-(etc)`;
-
-    const completion = await openai.chat.completions.create({
+    const r = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.3
+      messages: [{ role: "user", content: prompt }]
     });
 
-    return res.status(200).send(completion.choices[0].message.content);
+    return res.status(200).send(r.choices[0].message.content);
 
-  } catch (error) {
-    return res.status(500).send("Server error: " + error.message);
+  } catch (err) {
+    return res.status(500).send("Server error: " + err.message);
   }
 };
